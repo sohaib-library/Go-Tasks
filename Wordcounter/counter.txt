@@ -1,0 +1,13 @@
+When I am having a big heated discussion at work, I use a rubber chicken which I keep in my desk for just such occasions. The person holding the chicken is the only person who is allowed to talk. If you don't hold the chicken you cannot speak. You can only indicate that you want the chicken and wait until you get it before you speak. Once you have finished speaking, you can hand the chicken back to the moderator who will hand it to the next person to speak. This ensures that people do not speak over each other, and also have their own space to talk.
+
+Replace Chicken with Mutex and person with thread and you basically have the concept of a mutex.
+
+Of course, there is no such thing as a rubber mutex. Only rubber chicken. My cats once had a rubber mouse, but they ate it.
+
+Of course, before you use the rubber chicken, you need to ask yourself whether you actually need 5 people in one room and would it not just be easier with one person in the room on their own doing all the work. Actually, this is just extending the analogy, but you get the idea.
+
+The chicken is the mutex. People hoilding the mu.. chicken are competing threads. The Moderator is the OS. When people requests the chicken, they do a lock request. When you call mutex.lock(), your thread stalls in lock() and makes a lock request to the OS. When the OS detects that the mutex was released from a thread, it merely gives it to you, and lock() returns - the mutex is now yours and only yours. Nobody else can steal it, because calling lock() will block him. There is also try_lock() that will block and return true when mutex is yours and immediately false if mutex is in use.
+
+Sometimes the origin of some programming concepts is unclear. A newbie might go around wondering why everyone is talking about regex. It isn't apparent that regex is short for [reg]ular [ex]pression. Similarly, mutex is short for [mut]ual [ex]clusion. This might make the meaning of the term easier to digest. @TheSmurf linked to it in their answer, but it might be good to add it here for historical purposes. 
+
+A Mutex is a Mutually exclusive flag. It acts as a gate keeper to a section (or sections) of code allowing one thread in and blocking access to all others. This ensures that the code being controlled will only be hit by a single thread at a time. Just be sure to release the mutex when you are done.
