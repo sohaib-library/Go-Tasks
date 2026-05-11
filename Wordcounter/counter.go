@@ -66,12 +66,31 @@ func Letterscounter(constant string) int {
 	return len(constant)
 }
 
+//No Of  Special Characters
+
+func Spaceialchars(constant string) int {
+
+	Special := 0
+
+	for _, ch := range constant {
+		switch ch {
+		case '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/', '~', '`':
+			Special++
+		}
+
+	}
+	return Special
+
+}
+
 func main() {
-	fileData, _ := os.ReadFile("word.txt")
+	fileData, _ := os.ReadFile("counter.txt")
 	content := string(fileData)
 
 	fmt.Println("Total Words  :", countWords(content))
 	fmt.Println("Total Spaces  :", spaceCounting(content))
 	fmt.Println("Total Lines  :", Linecounter(content))
 	fmt.Println("Total Letters :", Letterscounter(content))
+	fmt.Println("Total Special Characters :", Spaceialchars(content))
+
 }

@@ -1,2 +1,1 @@
-This ensures that people do not speak over each other, and also have their own space to talk. 
-Replace Chicken with Mutex and person with thread and you basically have the concept of a mutex.
+This ensures that people do not speak over each other, and also have their own space to talk. Replace Chicken with Mutex and person with thread and you basically have the concept of a mutex.
