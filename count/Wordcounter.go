@@ -6,99 +6,46 @@ import (
 	"time"
 )
 
-var ch string
-
-func countWords(content string) int {
-
-	// Wrod Counting
-
-	count := 0
-	inWord := false
-
-	for _, ch := range content {
-		if ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' {
-			inWord = false
-		} else {
-			if !inWord {
-				count++
-				inWord = true
-			}
-		}
-	}
-	return count
-
-}
-
-// space counting
-
-func spaceCounting(constant string) int {
-
-	spaceCount := 0
-
-	for _, ch := range constant {
-
-		if ch == ' ' {
-			spaceCount++
-		}
-
-	}
-	return spaceCount
-
-}
-
-// Line Counting
-func Linecounter(content string) int {
-
-	Lineno := 0
-
-	for _, ch := range content {
-
-		if ch == '\n' {
-
-			Lineno++
-		}
-
-	}
-	return Lineno
-}
-
-// Letters
-func Letterscounter(constant string) int {
-	return len(constant)
-}
-
-//No Of  Special Characters
-
-func Spaceialchars(constant string) int {
-
-	Special := 0
-
-	for _, ch := range constant {
-		
-		switch ch {
-		case '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/', '~', '`'  :
-			Special++
-		}
-
-	}
-	return Special
-
-}
-
 func main() {
-
 	start := time.Now()
 
+	fileData, _ := os.ReadFile("word.txt")
 
-	fileData, _ := os.ReadFile("counter.txt")
-	content := string(fileData)
+	words := 0
+	spaces := 0
+	lines := 0
+	letters := 0
+	special := 0
+	inWord := false
 
-	fmt.Println("Total Words  :", countWords(content))
-	fmt.Println("Total Spaces  :", spaceCounting(content))
-	fmt.Println("Total Lines  :", Linecounter(content))
-	fmt.Println("Total Letters :", Letterscounter(content))
-	fmt.Println("Total Special Characters :", Spaceialchars(content))
+	for _, ch := range string(fileData) {
+		letters++
 
-	 fmt.Println("Execution time:",  time.Since(start))
+		switch ch {
+		case '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/', '~', '`':
+			special++
+		}
 
+		if ch == ' ' {
+			spaces++
+		}
+		if ch == '\n' {
+			lines++
+		}
+
+		if ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' {
+			inWord = false
+		} else if !inWord {
+			words++
+			inWord = true
+		}
+	}
+
+		fmt.Printf("Total Words %d \n", words)
+		fmt.Printf("Total Letter %d \n"  , letters)
+		fmt.Printf("Total Lines %d \n"  ,lines)
+		fmt.Printf("Total Special %d \n"  ,special)
+		fmt.Printf("Total Lines %d \n"  ,lines)
+
+	fmt.Println("Execution time:", time.Since(start))
 }
