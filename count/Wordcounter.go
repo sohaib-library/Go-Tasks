@@ -16,6 +16,7 @@ func main() {
 	lines := 0
 	letters := 0
 	special := 0
+	paragraphes := 0
 	inWord := false
 
 	for _, ch := range string(fileData) {
@@ -39,6 +40,7 @@ func main() {
 			words++
 			inWord = true
 		}
+		
 	}
 
 		fmt.Printf("Total Words %d \n", words)
@@ -46,6 +48,7 @@ func main() {
 		fmt.Printf("Total Lines %d \n"  ,lines)
 		fmt.Printf("Total Special %d \n"  ,special)
 		fmt.Printf("Total Lines %d \n"  ,lines)
+		fmt.Printf("Total Paragraphes %d \n"  ,paragraphes)
 
 	fmt.Println("Execution time:", time.Since(start))
 }
