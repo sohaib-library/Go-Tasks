@@ -80,17 +80,37 @@ func main() {
 			}
 
 			resultChan <- res
-		}(fileData[startIdx:endIdx])
+		}(fileData[start:end])
 
 		
-	}()
-	
-   }
+    }
+}
+   
+    go func() {
+    	wg.Wait()
+    	close(resultCh)
+    
+    }()
 
+	finalWords := 0
+	finalSpaces := 0
+	finalLines := 0
+	finalLetters := 0
+	finalSpecial := 0
 
+	for res := range resultChan {
+		finalWords += res.words
+		finalSpaces += res.spaces
+		finalLines += res.lines
+		finalLetters += res.letters
+		finalSpecial += res.special
+	}
 
-	
+	fmt.Printf("Total Words %d \n", finalWords)
+	fmt.Printf("Total Letter %d \n", finalLetters)
+	fmt.Printf("Total Lines %d \n", finalLines)
+	fmt.Printf("Total Special %d \n", finalSpecial)
 
-	fmt.Println("Execution Time", time.Since(time))
+	fmt.Println("Execution time:", time.Since(start))
 
 }
