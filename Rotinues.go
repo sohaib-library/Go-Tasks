@@ -1,116 +1,119 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"regexp"
-	"runtime"
-	"time"
+    "fmt"
+    "os"
+    "sync"
+    "time"
 )
 
-type result struct{
-	word int
-	lineno int
-	spaces int 
-	vawles int 
-	special int
-	letters int 
+type result struct {
+    words   int
+    lines   int
+    spaces  int
+    special int
+    letters int
 }
-
-
 
 func main() {
+    
+     var num int
+    fileData, _ := os.ReadFile("word.txt")
+    content := string(fileData)
 
-	time := time.Now()
+	fmt.Println("Enter The Number of Goroutinues")
+	fmt.Scan(&num)
 
-	Filedata, _:= os.ReadFile("word.txt")
-	content := string(Filedata)
-
-	TotalLen := len(content)
+    totalLen := len(content)
 
 	
-	worker := 4
-   chunkSize := (TotalLen + worker - 1) / worker
 
-   returnCh := make(chan result, worker)
+    worker := num
+    chunkSize := (totalLen + worker - 1) / worker
 
-   // chunk data 
+    resultChan := make(chan result, worker)
 
-   for i := 0; i < worker; i++ {
 
-	start := i*chunkSize
-	end := chunkSize + start
+    var wg sync.WaitGroup
 
-	if i == worker -1 {
+	startTime := time.Now()
 
-       end = TotalLen
-		
-	}
-	wg.Add(1)
+	
 
-	go func(chunk) {
+    // chunk data
+    for i := 0; i < worker; i++ {
+        start := i * chunkSize
+        end := start + chunkSize
 
-		defer wg.Done()
+        if i == worker-1 {
+            end = totalLen
+        }
 
-		returnCh <- result{}
-		inWord := false
+        wg.Add(1)
 
-		for _, b := range chunk {
-				ch := int(b)
-				
+        go func(chunk string) {
+            defer wg.Done()
 
-				switch ch {
-				case '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/', '~', '`':
-					res.special++
-				}
+            var res result
+            inWord := false
 
-				if ch == ' ' {
-					res.spaces++
-				}
-				if ch == '\n' {
-					res.lines++
-				}
+            for j := 0; j < len(chunk); j++ {
+                ch := chunk[j]
 
-				if ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' {
-					inWord = false
-				} else if !inWord {
-					res.words++
-					inWord = true
-				}
-			}
+                switch ch {
+                case '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=',
+                    '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/', '~', '`':
+                    res.special++
+                }
 
-			resultChan <- res
-		}(fileData[start:end])
+                if ch == ' ' {
+                    res.spaces++
+                }
+                if ch == '\n' {
+                    res.lines++
+                }
 
-		
+                if ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' {
+                    inWord = false
+                } else {
+                    if !inWord {
+                        res.words++
+                        inWord = true
+                    }
+                    // count letters (non-whitespace, non-special)
+                    if (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') {
+                        res.letters++
+                    }
+                }
+            }
+
+            resultChan <- res
+        }(content[start:end])
     }
-}
-   
+
     go func() {
-    	wg.Wait()
-    	close(resultCh)
-    
+        wg.Wait()
+        close(resultChan)
     }()
 
-	finalWords := 0
-	finalSpaces := 0
-	finalLines := 0
-	finalLetters := 0
-	finalSpecial := 0
+    finalWords := 0
+    finalSpaces := 0
+    finalLines := 0
+    finalLetters := 0
+    finalSpecial := 0
 
-	for res := range resultChan {
-		finalWords += res.words
-		finalSpaces += res.spaces
-		finalLines += res.lines
-		finalLetters += res.letters
-		finalSpecial += res.special
-	}
+    for res := range resultChan {
+        finalWords += res.words
+        finalSpaces += res.spaces
+        finalLines += res.lines
+        finalLetters += res.letters
+        finalSpecial += res.special
+    }
 
-	fmt.Printf("Total Words %d \n", finalWords)
-	fmt.Printf("Total Letter %d \n", finalLetters)
-	fmt.Printf("Total Lines %d \n", finalLines)
-	fmt.Printf("Total Special %d \n", finalSpecial)
-
-	fmt.Println("Execution time:", time.Since(start))
-
+    fmt.Printf("Total Words:   %d\n", finalWords)
+    fmt.Printf("Total Letters: %d\n", finalLetters)
+    fmt.Printf("Total Lines:   %d\n", finalLines)
+    fmt.Printf("Total Spaces:  %d\n", finalSpaces)
+    fmt.Printf("Total Special: %d\n", finalSpecial)
+    fmt.Println("Execution time:", time.Since(startTime))
 }
