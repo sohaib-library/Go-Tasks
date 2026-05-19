@@ -1,7 +1,6 @@
 package main
 
 import (
-	// "fmt"
 	"net/http"
 	"strconv"
 	routines "web-server/Routines"
@@ -26,20 +25,17 @@ func main() {
 }
 func filecount(ctx *gin.Context) {
 
-
-		key := ctx.Param("Id")
-        Id, _ := strconv.Atoi(key)
+	key := ctx.Param("Id")
+	Id, _ := strconv.Atoi(key)
 
 	letters, words, lines, spaces, special := routines.Filecontext(Id)
 
-
-
-	wordCountResponse := WordCountResponse {
-		WordCount:          words,
-		LetterCount:        letters,
-		LineCount:          lines,
-		SpaceCount:         spaces,
-		SpecialCharCount:   special,
+	wordCountResponse := WordCountResponse{
+		WordCount:        words,
+		LetterCount:      letters,
+		LineCount:        lines,
+		SpaceCount:       spaces,
+		SpecialCharCount: special,
 	}
 
 	ctx.IndentedJSON(http.StatusOK, wordCountResponse)

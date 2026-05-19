@@ -30,7 +30,7 @@ func Filecontext(Id int) (int, int, int, int, int) {
 		fmt.Println("file isn't exits", err)
 
 	}
-	
+
 	content := string(fileData)
 
 	// fmt.Println("Enter The Number of Goroutinues")
@@ -121,6 +121,10 @@ func Filecontext(Id int) (int, int, int, int, int) {
 	fmt.Printf("Total Spaces:  %d\n", finalSpaces)
 	fmt.Printf("Total Special: %d\n", finalSpecial)
 	fmt.Println("Execution time:", time.Since(startTime))
+
+
+
+
 
 	return finalLetters, finalWords, finalLines, finalSpaces, finalSpecial
 
