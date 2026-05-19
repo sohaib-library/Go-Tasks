@@ -1,4 +1,4 @@
-package main
+package routines
 
 import (
 	"fmt"
@@ -15,10 +15,21 @@ type result struct {
 	letters int
 }
 
-func filecontext(result) {
+// return result  {
+
+// finalLetters,
+// finalWord  ,
+// finalLines   ,
+// finalSpace   ,
+// finalSpecial ,
+func Filecontext() (int, int, int, int, int) {
 
 	var num int
-	fileData, _ := os.ReadFile("word.txt")
+	fileData, err := os.ReadFile("Routines/word.txt")
+	if err != nil {
+		fmt.Println("file isn't exits" , err )
+	
+	}
 
 	content := string(fileData)
 
@@ -86,8 +97,8 @@ func filecontext(result) {
 	}
 
 	// go func() {
-		wg.Wait()
-		close(resultChan)
+	wg.Wait()
+	close(resultChan)
 	// }()
 
 	finalWords := 0
@@ -109,15 +120,8 @@ func filecontext(result) {
 	fmt.Printf("Total Lines:   %d\n", finalLines)
 	fmt.Printf("Total Spaces:  %d\n", finalSpaces)
 	fmt.Printf("Total Special: %d\n", finalSpecial)
-
 	fmt.Println("Execution time:", time.Since(startTime))
 
-	return result struct {
-		
-    finalLetters int
-    finalWord    int
-    finalLines   int
-    finalSpace   int
-    finalSpecial int
-}
+	return finalLetters, finalWords, finalLines, finalSpaces, finalSpecial
+
 }
