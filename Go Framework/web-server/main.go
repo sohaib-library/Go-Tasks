@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"net/http"
 	"strconv"
 	routines "web-server/Routines"
@@ -23,20 +24,39 @@ func main() {
 
 	router.Run(":8000")
 }
+
 func filecount(ctx *gin.Context) {
+
+
 
 	key := ctx.Param("Id")
 	Id, _ := strconv.Atoi(key)
 
-	letters, words, lines, spaces, special := routines.Filecontext(Id)
+	
 
-	wordCountResponse := WordCountResponse{
+	
+	file , _, err := ctx.Request.FormFile("file")
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error" : "Failde upload file required "})
+
+	}
+
+
+	data , err := io.ReadAll(file)
+	if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read file"})
+		return
+	}
+
+
+	letters, words, lines, spaces, special := routines.Filecontext(Id, string(data))
+
+	ctx.IndentedJSON(http.StatusOK, WordCountResponse{
 		WordCount:        words,
 		LetterCount:      letters,
 		LineCount:        lines,
 		SpaceCount:       spaces,
 		SpecialCharCount: special,
-	}
-
-	ctx.IndentedJSON(http.StatusOK, wordCountResponse)
+	})
 }

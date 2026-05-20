@@ -2,7 +2,6 @@ package routines
 
 import (
 	"fmt"
-	"os"
 	"sync"
 	"time"
 )
@@ -22,16 +21,7 @@ type result struct {
 // finalLines   ,
 // finalSpace   ,
 // finalSpecial ,
-func Filecontext(Id int) (int, int, int, int, int) {
-
-	// var Id int
-	fileData, err := os.ReadFile("Routines/word.txt")
-	if err != nil {
-		fmt.Println("file isn't exits", err)
-
-	}
-
-	content := string(fileData)
+func Filecontext(Id int, content string) (int, int, int, int, int) {
 
 	// fmt.Println("Enter The Number of Goroutinues")
 	// fmt.Scan(&num)
@@ -121,10 +111,6 @@ func Filecontext(Id int) (int, int, int, int, int) {
 	fmt.Printf("Total Spaces:  %d\n", finalSpaces)
 	fmt.Printf("Total Special: %d\n", finalSpecial)
 	fmt.Println("Execution time:", time.Since(startTime))
-
-
-
-
 
 	return finalLetters, finalWords, finalLines, finalSpaces, finalSpecial
 
