@@ -78,7 +78,6 @@ func Filecontext(Id int, content string) (int, int, int, int, int) {
 
 	wg.Wait()
 	close(resultChan)
-	
 
 	finalWords := 0
 	finalSpaces := 0
@@ -94,12 +93,14 @@ func Filecontext(Id int, content string) (int, int, int, int, int) {
 		finalSpecial += res.special
 	}
 
+	elapsed := time.Since(startTime)
+
 	fmt.Printf("Total Words:   %d\n", finalWords)
 	fmt.Printf("Total Letters: %d\n", finalLetters)
 	fmt.Printf("Total Lines:   %d\n", finalLines)
 	fmt.Printf("Total Spaces:  %d\n", finalSpaces)
 	fmt.Printf("Total Special: %d\n", finalSpecial)
-	fmt.Println("Execution time:", time.Since(startTime))
+	fmt.Println("Execution time:", elapsed)
 
 	return finalLetters, finalWords, finalLines, finalSpaces, finalSpecial
 

@@ -1,8 +1,8 @@
 package models
 
-type File struct{
-	
-	  ID      int
-    Name    string
-    Content string
+type File struct {
+	ID           int
+	TotalWords   int
+	TotalLetters int
+	TotalSpaces  int
 }

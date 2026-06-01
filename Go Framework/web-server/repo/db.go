@@ -41,5 +41,13 @@ func Database(envpath string) *sql.DB {
 		log.Fatalf("Failed to ping DB: %v", err)
 	}
 
+	log.Println("Database connected successfully")
+
 	return DB
+}
+
+func SaveResult(db *sql.DB, words, letters, spaces int) error {
+	query := `INSERT INTO result (total_words, total_letters, total_spaces) VALUES ($1, $2, $3)`
+	_, err := db.Exec(query, words, letters, spaces)
+	return err
 }
