@@ -2,6 +2,8 @@ package main
 
 import (
 	"web-server/handler"
+	"web-server/migration"
+	"web-server/repo"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,7 +11,13 @@ import (
 func main() {
 	var router *gin.Engine = gin.Default()
 
-	router.GET("/count/:Id", handler.Filecount)
+	
+	DB := repo.Database(".env")
+	defer DB.Close() 
 
+	migration.Migertions(DB)
+
+	router.GET("/count/:Id", handler.Filecount)
 	router.Run(":8000")
 }
+
