@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
@@ -13,18 +14,22 @@ import (
 
 func Filecount(ctx *gin.Context) {
 
+	// get id from user
+
 	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to Convert "})
 		return
 	}
-
+	// File handling
 	file, _, err := ctx.Request.FormFile("file")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed upload file  "})
 		return
 	}
+
+	// readfie
 
 	data, err := io.ReadAll(file)
 	if err != nil {
@@ -35,7 +40,9 @@ func Filecount(ctx *gin.Context) {
 	letters, words, lines, spaces, special := wordcount.Filecontext(Id, string(data))
 
 	// Save result to database
-	if err := repo.SaveResult(repo.DB, words, letters, spaces); err != nil {
+
+	if err := repo.SaveResult(repo.DB, words, letters, spaces, lines, special); err != nil {
+		fmt.Println("error", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save result to DB"})
 		return
 	}

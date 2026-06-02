@@ -18,6 +18,11 @@ func main() {
 	migration.Migertions(DB)
 
 	router.GET("/count/:Id", handler.Filecount)
+
 	router.Run(":8000")
 }
 
+//post user file or go route
+//get by id 
+//get all
+//delete

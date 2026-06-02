@@ -5,4 +5,6 @@ type File struct {
 	TotalWords   int
 	TotalLetters int
 	TotalSpaces  int
+	TotalLines   int
+    TotalSpecial int
 }

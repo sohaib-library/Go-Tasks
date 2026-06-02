@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -46,8 +45,8 @@ func Database(envpath string) *sql.DB {
 	return DB
 }
 
-func SaveResult(db *sql.DB, words, letters, spaces int) error {
-	query := `INSERT INTO result (total_words, total_letters, total_spaces) VALUES ($1, $2, $3)`
-	_, err := db.Exec(query, words, letters, spaces)
+func SaveResult(db *sql.DB, words, letters, spaces, lines, specialchar  int) error {
+	query := `INSERT INTO result (total_words, total_letters, total_spaces, total_lines, total_special_char ) VALUES ($1, $2, $3, $4, $5 )`
+	_, err := db.Exec(query, words, letters, spaces, lines, specialchar  )
 	return err
 }
