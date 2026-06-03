@@ -13,15 +13,25 @@ import (
 )
 
 func Filecount(ctx *gin.Context) {
+	if ctx.Request.Method == http.MethodGet {
+		ctx.JSON(http.StatusMethodNotAllowed, gin.H{
+			"error": "GET method is not allowed for file uploads. Please use POST.",
+		})
+		return
+	}
 
 	// get id from user
 
-	key := ctx.Param("Id")
-	Id, err := strconv.Atoi(key)
+	// 1. Get string from form-data
+
+	idstr := ctx.PostForm("id")
+
+	Id, err := strconv.Atoi(idstr)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to Convert "})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid integer value"})
 		return
 	}
+
 	// File handling
 	file, _, err := ctx.Request.FormFile("file")
 	if err != nil {

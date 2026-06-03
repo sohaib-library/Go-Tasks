@@ -1,0 +1,32 @@
+routes file
+hander layer
+usecase/service
+dao/repo
+models
+
+routes- handler/create.go (handler) -service/.go(logic) - repo/.go(data)
+
+
+
+
+
+
+//postgres
+//pgadmin
+//migration k thorugh table likhny ghain
+
+
+Check goose-migration and  use it 
+ Make command
+
+
+// Create the CRUD
+
+create the route of CREATE , READ , UPDATE , DELETE
+
+and update every think in DB
+
+
+// user give go routinus from text not params 
+// only post use for  goroutinues and file 
+// get use for id

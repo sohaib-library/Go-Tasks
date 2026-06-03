@@ -100,6 +100,8 @@ func Filecontext(Id int, content string) (int, int, int, int, int) {
 	fmt.Printf("Total Lines:   %d\n", finalLines)
 	fmt.Printf("Total Spaces:  %d\n", finalSpaces)
 	fmt.Printf("Total Special: %d\n", finalSpecial)
+	fmt.Printf("Total Special: %d\n", finalSpecial)
+
 	fmt.Println("Execution time:", elapsed)
 
 	return finalLetters, finalWords, finalLines, finalSpaces, finalSpecial
