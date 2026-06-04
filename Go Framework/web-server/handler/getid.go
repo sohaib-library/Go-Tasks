@@ -1,36 +1,35 @@
 package handler
 
 import (
-	"log"
+	// "log"
+	// "net/http"
+	"strconv" 
 	"web-server/models"
 	"web-server/repo"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Getdata(ctx *gin.Context) {
+func Getid(ctx *gin.Context) {
+
+	// Get Specific Id from user 
+
+	key := ctx.Param("Id")
+	Id, _ := strconv.Atoi(key)
+	
 
 
-
-	row, err := repo.DB.Query(`
+    row := repo.DB.QueryRow(`
 
 	SELECT id , total_words, total_letters, total_spaces, total_lines, total_special_char
-	
 	From result
 
-	`)
+	WHERE id = $1
 
-	if err != nil {
-		log.Panic("error" , err)
-	}
+	`, Id )
 
-	defer row.Close() 
-
-	var result []models.File
 	
-	for row.Next() {
 		var f models.File
-
 		err := row.Scan(
 
             &f.ID,
@@ -40,19 +39,18 @@ func Getdata(ctx *gin.Context) {
             &f.TotalLines,
             &f.TotalSpecial,
 		)
+
+
 		if err != nil {
-			log.Panic("Scan Error" , err)
+
+			ctx.JSON (500 , gin.H{"error" : err.Error()})
+
 		}
-		
-		result = append(result,f)
+	
 
-	}
 
-	if err := row.Err(); err != nil {
 
-		log.Panic("row error ", err)
-		
-	}
+	ctx.JSON(200 , f)
 
-	ctx.JSON(200 , result)
+
 }

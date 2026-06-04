@@ -9,6 +9,9 @@ import (
 func RegisterRoute(router *gin.Engine) {
 
 	router.POST("/count", handler.Filecount)
-	router.GET("/result", handler.Getdata )
+	router.GET("/results", handler.Getdata)
+	router.GET("/result/:Id", handler.Getid)
+	router.DELETE("/result/:Id", handler.Deleteid)
+	router.PUT("/result/:Id", handler.Updateid)
 
 }
