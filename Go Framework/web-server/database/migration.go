@@ -1,4 +1,4 @@
- package migration
+package database
 
 import (
 	"database/sql"
@@ -8,7 +8,7 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
-//go:embed migrations/*.sql
+//go:embed result/*.sql
 var embedMigrations embed.FS
 
 func Migertions(db *sql.DB) {
@@ -18,7 +18,7 @@ func Migertions(db *sql.DB) {
 		log.Fatalf("goose set dialect error: %v", err)
 	}
 
-	if err := goose.Up(db, "migrations"); err != nil {
+	if err := goose.Up(db, "result"); err != nil {
 		log.Fatalf("goose migration failed: %v", err)
 	}
 

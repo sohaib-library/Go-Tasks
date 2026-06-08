@@ -5,8 +5,8 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"web-server/database"
 	"web-server/models"
-	"web-server/repo"
 	wordcount "web-server/service"
 
 	"github.com/gin-gonic/gin"
@@ -20,10 +20,7 @@ func Filecount(ctx *gin.Context) {
 		return
 	}
 
-	// get id from user
-
-	// 1. Get string from form-data
-
+	// 1. Get id from form-data
 	idstr := ctx.PostForm("id")
 
 	Id, err := strconv.Atoi(idstr)
@@ -35,12 +32,11 @@ func Filecount(ctx *gin.Context) {
 	// File handling
 	file, _, err := ctx.Request.FormFile("file")
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed upload file  "})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed upload file"})
 		return
 	}
 
-	// readfie
-
+	// Read file
 	data, err := io.ReadAll(file)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read file"})
@@ -50,8 +46,7 @@ func Filecount(ctx *gin.Context) {
 	letters, words, lines, spaces, special := wordcount.Filecontext(Id, string(data))
 
 	// Save result to database
-
-	if err := repo.SaveResult(repo.DB, words, letters, spaces, lines, special); err != nil {
+	if err := database.SaveResult(database.DB, words, letters, spaces, lines, special); err != nil {
 		fmt.Println("error", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save result to DB"})
 		return

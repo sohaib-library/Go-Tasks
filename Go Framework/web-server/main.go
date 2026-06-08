@@ -1,9 +1,7 @@
 package main
 
 import (
-	// "web-server/handler"
-	"web-server/migration"
-	"web-server/repo"
+	"web-server/database"
 	"web-server/route"
 
 	"github.com/gin-gonic/gin"
@@ -11,9 +9,9 @@ import (
 
 func main() {
 
-	DB := repo.Database(".env")
+	DB := database.Database(".env")
 	defer DB.Close()
-	migration.Migertions(DB)
+	database.Migertions(DB)
 
 	router := gin.Default()
 	route.RegisterRoute(router)

@@ -1,58 +1,19 @@
 package handler
 
 import (
-	"log"
-	"web-server/models"
+	"net/http"
+	"web-server/database"
 	"web-server/repo"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Getdata(ctx *gin.Context) {
-
-
-
-	row, err := repo.DB.Query(`
-
-	SELECT id , total_words, total_letters, total_spaces, total_lines, total_special_char
-	
-	From result
-
-	`)
-
+	results, err := repo.GetAllResults(database.DB)
 	if err != nil {
-		log.Panic("error" , err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
-	defer row.Close() 
-
-	var result []models.File
-	
-	for row.Next() {
-		var f models.File
-
-		err := row.Scan(
-
-            &f.ID,
-            &f.TotalWords,
-            &f.TotalLetters,
-            &f.TotalSpaces,
-            &f.TotalLines,
-            &f.TotalSpecial,
-		)
-		if err != nil {
-			log.Panic("Scan Error" , err)
-		}
-		
-		result = append(result,f)
-
-	}
-
-	if err := row.Err(); err != nil {
-
-		log.Panic("row error ", err)
-		
-	}
-
-	ctx.JSON(200 , result)
+	ctx.JSON(http.StatusOK, results)
 }
