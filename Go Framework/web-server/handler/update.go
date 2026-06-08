@@ -12,7 +12,7 @@ import (
 )
 
 func Updateid(ctx *gin.Context) {
-	key := ctx.Param("id")
+	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)
 	if err != nil || Id == 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid or missing Id"})

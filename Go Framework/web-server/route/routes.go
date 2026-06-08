@@ -12,6 +12,6 @@ func RegisterRoute(router *gin.Engine) {
 	router.GET("/results", handler.Getdata)
 	router.GET("/result/:Id", handler.Getid)
 	router.DELETE("/result/:Id", handler.Deleteid)
-	router.PATCH("/result/:id", handler.Updateid)
+	router.PATCH("/result/:Id", handler.Updateid)
 
 }
