@@ -12,7 +12,7 @@ import (
 
 func Filecount(ctx *gin.Context) {
 
-
+	// Get worker count from form-data
 	idstr := ctx.PostForm("id")
 	workers, err := strconv.Atoi(idstr)
 	if err != nil || workers <= 0 {
@@ -20,7 +20,7 @@ func Filecount(ctx *gin.Context) {
 		return
 	}
 
-
+	// Read uploaded file
 	file, _, err := ctx.Request.FormFile("file")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to upload file"})
@@ -40,5 +40,5 @@ func Filecount(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, result)
+	ctx.IndentedJSON(http.StatusOK, result)
 }
