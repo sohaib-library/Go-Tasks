@@ -5,7 +5,7 @@ import (
 	"web-server/models"
 )
 
-
+// Get all data
 func GetAllResults(db *sql.DB) ([]models.File, error) {
 
 	rows, err := db.Query(`

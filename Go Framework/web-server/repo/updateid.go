@@ -5,7 +5,7 @@ import (
 	"web-server/models"
 )
 
-
+// Update id
 func UpdateResultByID(db *sql.DB, id int, f models.File) (int64, error) {
 	res, err := db.Exec(`
 		UPDATE result

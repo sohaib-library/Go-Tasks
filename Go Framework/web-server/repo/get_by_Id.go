@@ -5,7 +5,7 @@ import (
 	"web-server/models"
 )
 
-
+// Get data by id
 func GetResultByID(db *sql.DB, id int) (models.File, error) {
 	var f models.File
 	row := db.QueryRow(`

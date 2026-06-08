@@ -1,11 +1,10 @@
 package main
 
 import (
-	
 	"web-server/database"
 	"web-server/route"
-	"github.com/gin-gonic/gin"
 
+	"github.com/gin-gonic/gin"
 )
 
 func main() {

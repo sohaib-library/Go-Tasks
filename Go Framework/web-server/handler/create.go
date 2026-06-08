@@ -1,44 +1,62 @@
 package handler
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"strconv"
 	"web-server/database"
-	"web-server/service"
+	"web-server/models"
+	wordcount "web-server/service"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Filecount(ctx *gin.Context) {
-
-	// Get worker count from form-data
-	idstr := ctx.PostForm("id")
-	workers, err := strconv.Atoi(idstr)
-	if err != nil || workers <= 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid integer value for 'id'"})
+	if ctx.Request.Method == http.MethodGet {
+		ctx.JSON(http.StatusMethodNotAllowed, gin.H{
+			"error": "GET method is not allowed for file uploads. Please use POST.",
+		})
 		return
 	}
 
-	// Read uploaded file
+	// 1. Get id from form-data
+	idstr := ctx.PostForm("id")
+
+	Id, err := strconv.Atoi(idstr)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid integer value"})
+		return
+	}
+
+	// File handling
 	file, _, err := ctx.Request.FormFile("file")
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to upload file"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed upload file"})
 		return
 	}
 
+	// Read file
 	data, err := io.ReadAll(file)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to read file"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "failed to read file"})
 		return
 	}
 
+	letters, words, lines, spaces, special := wordcount.Filecontext(Id, string(data))
 
-	result, err := service.CreateWordCount(database.DB, workers, string(data))
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save result to DB"})
+	// Save result to database
+	if err := database.SaveResult(database.DB, words, letters, spaces, lines, special); err != nil {
+		fmt.Println("error", err)
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save result to DB"})
 		return
 	}
 
-	ctx.IndentedJSON(http.StatusOK, result)
+	ctx.IndentedJSON(http.StatusOK, models.WordCountResponse{
+		WordCount:        words,
+		LetterCount:      letters,
+		LineCount:        lines,
+		SpaceCount:       spaces,
+		SpecialCharCount: special,
+	})
 }
