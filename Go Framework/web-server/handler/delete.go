@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"web-server/database"
-	"web-server/repo"
+	"web-server/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,23 +13,22 @@ import (
 func Deleteid(ctx *gin.Context) {
 	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)
-
 	if err != nil || Id == 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "The Id does not exist"})
 		return
 	}
 
-	affected, err := repo.DeleteResultByID(database.DB, Id)
+	affected, err := service.DeleteByID(database.DB, Id)
 	if err != nil {
 		logrus.Error(err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete record"})
 		return
 	}
 
 	if affected == 0 {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
+	ctx.JSON(http.StatusOK, gin.H{"message": "Record deleted successfully"})
 }

@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"web-server/database"
 	"web-server/models"
-	"web-server/repo"
+	"web-server/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -19,13 +19,13 @@ func Updateid(ctx *gin.Context) {
 		return
 	}
 
-	var final models.File
-	if err := ctx.ShouldBindJSON(&final); err != nil {
+	var payload models.File
+	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	affected, err := repo.UpdateResultByID(database.DB, Id, final)
+	affected, err := service.UpdateByID(database.DB, Id, payload)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update record"})
@@ -37,6 +37,6 @@ func Updateid(ctx *gin.Context) {
 		return
 	}
 
-	final.ID = Id
-	ctx.JSON(http.StatusOK, final)
+	payload.ID = Id
+	ctx.JSON(http.StatusOK, payload)
 }

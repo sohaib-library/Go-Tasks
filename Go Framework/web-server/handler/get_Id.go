@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"web-server/database"
-	"web-server/repo"
+	"web-server/service"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,7 +17,7 @@ func Getid(ctx *gin.Context) {
 		return
 	}
 
-	f, err := repo.GetResultByID(database.DB, Id)
+	f, err := service.GetByID(database.DB, Id)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
 		return
