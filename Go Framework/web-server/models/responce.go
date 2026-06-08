@@ -7,3 +7,5 @@ type WordCountResponse struct {
 	SpaceCount       int
 	SpecialCharCount int
 }
+
+

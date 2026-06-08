@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"sync"
 	"time"
+	"web-server/models"
+
+	// "go.uber.org/mock/mockgen/model"
 )
 
-type result struct {
-	words   int
-	lines   int
-	spaces  int
-	special int
-	letters int
-}
+type result models.WordCountResponse ;
 
 func Filecontext(Id int, content string) (int, int, int, int, int) {
 
@@ -21,7 +18,7 @@ func Filecontext(Id int, content string) (int, int, int, int, int) {
 	worker := Id
 	chunkSize := (totalLen + worker - 1) / worker
 
-	resultChan := make(chan result, worker)
+	resultChan := make(chan models.WordCountResponse, worker)
 
 	var wg sync.WaitGroup
 
@@ -40,7 +37,7 @@ func Filecontext(Id int, content string) (int, int, int, int, int) {
 		go func(chunk string) {
 			defer wg.Done()
 
-			var res result
+			var res models.WordCountResponse
 			inWord := false
 
 			for j := 0; j < len(chunk); j++ {
@@ -49,25 +46,25 @@ func Filecontext(Id int, content string) (int, int, int, int, int) {
 				switch ch {
 				case '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=',
 					'{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/', '~', '`':
-					res.special++
+					res.SpecialCharCount++
 				}
 
 				if ch == ' ' {
-					res.spaces++
+					res.SpaceCount++
 				}
 				if ch == '\n' {
-					res.lines++
+					res.LineCount++
 				}
 
 				if ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' {
 					inWord = false
 				} else {
 					if !inWord {
-						res.words++
+						res.WordCount++
 						inWord = true
 					}
 					if (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') {
-						res.letters++
+						res.LetterCount++
 					}
 				}
 			}
@@ -86,11 +83,11 @@ func Filecontext(Id int, content string) (int, int, int, int, int) {
 	finalSpecial := 0
 
 	for res := range resultChan {
-		finalWords += res.words
-		finalSpaces += res.spaces
-		finalLines += res.lines
-		finalLetters += res.letters
-		finalSpecial += res.special
+		finalWords += res.WordCount
+		finalSpaces += res.SpaceCount
+		finalLines += res.LineCount
+		finalLetters += res.LetterCount
+		finalSpecial += res.SpecialCharCount
 	}
 
 	elapsed := time.Since(startTime)
