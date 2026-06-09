@@ -4,7 +4,8 @@ import (
 	"net/http"
 	"strconv"
 	"web-server/database"
-	"web-server/repo"
+	// "web-server/repo"
+	"web-server/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -19,7 +20,7 @@ func Deleteid(ctx *gin.Context) {
 		return
 	}
 
-	affected, err := repo.DeleteResultByID(database.DB, Id)
+	affected, err := service.DeleteByID(database.DB, Id)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})

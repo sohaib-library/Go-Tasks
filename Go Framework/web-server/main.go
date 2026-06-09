@@ -17,8 +17,3 @@ func main() {
 	route.RegisterRoute(router)
 	router.Run(":8000")
 }
-
-//post user file or go route
-//get by id
-//get all
-//delete

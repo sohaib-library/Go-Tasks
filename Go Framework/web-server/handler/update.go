@@ -5,7 +5,8 @@ import (
 	"strconv"
 	"web-server/database"
 	"web-server/models"
-	"web-server/repo"
+	// "web-server/repo"
+	"web-server/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -25,7 +26,7 @@ func Updateid(ctx *gin.Context) {
 		return
 	}
 
-	affected, err := repo.UpdateResultByID(database.DB, Id, final)
+	affected, err := service.UpdateByID(database.DB, Id, final)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update record"})
