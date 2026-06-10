@@ -12,8 +12,8 @@ type File struct {
 
 
 type Users struct {
-	ID               int  `json:"id"`
-	NAME      int `json:"name"`
-	EMAIL     int `json:"email"`
-	PASSWORD int `json:"password"`
+	ID         int `json:"id"`
+	NAME      string `json:"name"`
+	EMAIL     string `json:"email"`
+	PASSWORD string `json:"password"`
 }

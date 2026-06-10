@@ -10,7 +10,7 @@ func RegisterRoute(router *gin.Engine) {
 
     //  Validation
 
-	router.POST("/signup" , )
+	router.POST("/signup" , handler.SignUP )
 
 
 

@@ -2,11 +2,12 @@ package repo
 
 import "database/sql"
 
-func SignUP(db *sql.DB ,id int , name string , email string , password string ) error {
-	query := `INSERT INTO users (id , name, email, password) VALUES ($1, $2, $3, $4)`
-	_, err := db.Exec(query , id , name , email ,password)
+func SignUP(db *sql.DB , name string , email string , password string ) (int64, error) {
+	query := `INSERT INTO users ( name, email, password) VALUES ($1, $2, $3)`
+	res , err := db.Exec(query , name , email , password)
 	if err != nil {
-		return err
+		return 0, err
      }
-	return err
+	affected , err := res.RowsAffected()
+	return affected , err
 }
