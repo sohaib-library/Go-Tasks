@@ -1,5 +1,9 @@
-DB_URL=postgres://postgres:newpassword123@localhost:5432/postgres?sslmode=disable
-MIGRATION_DIR=./migration/migrations
+include .env
+
+DB_URL=postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):$(POSTGRES_PORT)/$(POSTGRES_DB)?sslmode=disable
+MIGRATION_DIR=./database/migration
+
+.PHONY: migrate-up migrate-down migrate-status create-migration run
 
 migrate-up:
 	goose -dir $(MIGRATION_DIR) postgres "$(DB_URL)" up

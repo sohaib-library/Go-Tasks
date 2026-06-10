@@ -8,3 +8,12 @@ type File struct {
 	TotalLines       int `json:"total_lines"`
 	TotalSpecial int `json:"total_special_char"`
 }
+
+
+
+type Users struct {
+	ID               int  `json:"id"`
+	NAME      int `json:"name"`
+	EMAIL     int `json:"email"`
+	PASSWORD int `json:"password"`
+}

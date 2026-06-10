@@ -8,6 +8,15 @@ import (
 
 func RegisterRoute(router *gin.Engine) {
 
+    //  Validation
+
+	router.POST("/signup" , )
+
+
+
+
+
+
 	router.POST("/count", handler.Filecount)
 	router.GET("/results", handler.Getdata)
 	router.GET("/result/:Id", handler.Getid)
