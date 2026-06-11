@@ -17,3 +17,8 @@ type Users struct {
 	EMAIL     string `json:"email"`
 	PASSWORD string `json:"password"`
 }
+
+type Login struct {
+	EMAIL string `json:"email"`
+	PASSWORD string `json:"password"`
+}

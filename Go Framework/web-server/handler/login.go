@@ -1,32 +1,29 @@
 package handler
 
 import (
+	// "database/sql"
 	"log"
 	"net/http"
-	"web-server/database"
+
+	// "web-server/database"
 	"web-server/models"
 	"web-server/service"
-	"web-server/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
-func SignUP(ctx *gin.Context) {
+func Login(ctx *gin.Context)  {
 
-	var users models.Users
-
-	if err := ctx.ShouldBindJSON(&users); err != nil {
+	var login models.Login
+	  
+     if err := ctx.ShouldBindJSON(&login); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid signup request"})
 		log.Print(err.Error())
 		return
 	}
 
-	hashedPassword  ,_ := utils.EncryptPassword(users.PASSWORD)
-	
-	users.PASSWORD = hashedPassword
-
-	affected, err := service.SignUP(database.DB, users)
+	affected, err := service.Login( login)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
@@ -38,5 +35,9 @@ func SignUP(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, users)
+
+	
+
+
+	
 }

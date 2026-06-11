@@ -11,6 +11,7 @@ func RegisterRoute(router *gin.Engine) {
     //  Validation
 
 	router.POST("/signup" , handler.SignUP )
+	router.POST("/login" , handler.Login )
 
 
 
