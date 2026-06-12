@@ -21,7 +21,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	_, err := service.Login(login)
+	err, token := service.Login(login)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
@@ -29,5 +29,7 @@ func Login(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"message": "Login successfully "})
+		"message": "Login successfully",
+		"token":   token,
+	})
 }
