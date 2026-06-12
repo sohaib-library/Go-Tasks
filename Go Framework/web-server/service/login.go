@@ -1,37 +1,23 @@
 package service
 
 import (
-	"database/sql"
-	"log"
 	"web-server/models"
 	"web-server/repo"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(db *sql.DB, login models.Login )  {
+func Login(login models.Login) (*models.Users, error) {
 
-	Resp ,err := repo.Login(login)
+	user, err := repo.Login(login)
 	if err != nil {
-		log.Print(err)
-		
+		return nil, err
 	}
 
-	userPass:= []byte(Resp.PASSWORD)
-    dbPass:= []byte(login.PASSWORD)
-    passErr:= bcrypt.CompareHashAndPassword(dbPass, userPass)
-    if passErr != nil{
-    log.Println(passErr)    
-       
-    }
+	err = bcrypt.CompareHashAndPassword([]byte(user.PASSWORD), []byte(login.PASSWORD))
+	if err != nil {
+		return nil, err
+	}
 
-
-
-
-
-
-
-
-
-
+	return user, nil
 }

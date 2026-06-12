@@ -6,7 +6,7 @@ type File struct {
 	TotalLetters     int `json:"total_letters"`
 	TotalSpaces      int `json:"total_spaces"`
 	TotalLines       int `json:"total_lines"`
-	TotalSpecial int `json:"total_special_char"`
+	TotalSpecial     int `json:"total_special_char"`
 }
 
 

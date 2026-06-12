@@ -15,10 +15,20 @@ func UpdateResultByID(db *sql.DB, id int, f models.File) (int64, error) {
 		    total_lines        = $4,
 		    total_special_char = $5
 		WHERE id = $6
-	`, f.TotalWords, f.TotalLetters, f.TotalSpaces, f.TotalLines, f.TotalSpecial, id)
+	`, f.TotalWords,
+		f.TotalLetters,
+		f.TotalSpaces,
+		f.TotalLines,
+		f.TotalSpecial,
+		id)
 	if err != nil {
 		return 0, err
 	}
 	affected, err := res.RowsAffected()
+	if err != nil {
+		return 0, err
+	}
 	return affected, err
+
+	
 }

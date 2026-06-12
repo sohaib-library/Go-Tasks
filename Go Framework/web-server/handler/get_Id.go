@@ -14,13 +14,13 @@ func Getid(ctx *gin.Context) {
 	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)
 	if err != nil || Id == 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid or missing Id"})
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid int value"})
 		return
 	}
 
 	f, err := service.GetByID(database.DB, Id)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "Document not found"})
 		return
 	}
 

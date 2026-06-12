@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"web-server/models"
 	"web-server/repo"
 
@@ -20,11 +21,17 @@ func CreateById(db *sql.DB, ctx *gin.Context) (int, any) {
 		return http.StatusBadRequest, gin.H{"error": "Invalid int value"}
 	}
 
-	file, _, err := ctx.Request.FormFile("file")
+	file, header, err := ctx.Request.FormFile("file")
 	if err != nil {
 		return http.StatusBadRequest, gin.H{"error": "Failed upload file"}
 	}
 	defer file.Close()
+
+	if !strings.HasSuffix(header.Filename, ".txt") {
+		return http.StatusBadRequest, gin.H{
+			"error": "only .txt files allowed",	}
+		
+	}
 
 	data, err := io.ReadAll(file)
 	if err != nil {

@@ -20,13 +20,13 @@ func Updateid(ctx *gin.Context) {
 		return
 	}
 
-	var final models.File
-	if err := ctx.ShouldBindJSON(&final); err != nil {
+	var f models.File
+	if err := ctx.ShouldBindJSON(&f); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	affected, err := service.UpdateByID(database.DB, Id, final)
+	affected, err := service.UpdateByID(database.DB, Id, f)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update record"})
@@ -38,6 +38,6 @@ func Updateid(ctx *gin.Context) {
 		return
 	}
 
-	final.ID = Id
-	ctx.JSON(http.StatusOK, final)
+	f.ID = Id
+	ctx.JSON(http.StatusOK, f)
 }
