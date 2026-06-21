@@ -6,6 +6,6 @@ import (
 	"web-server/repo"
 )
 
-func GetByID(db *sql.DB, id int) (models.File, error) {
-	return repo.GetResultByID(db, id)
+func GetByID(db *sql.DB, id, userID int) (models.File, error) {
+	return repo.GetResultByID(db, id, userID)
 }

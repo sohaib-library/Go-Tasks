@@ -14,6 +14,11 @@ import (
 )
 
 func CreateById(db *sql.DB, ctx *gin.Context) (int, any) {
+	userID := ctx.GetInt("user_id")
+	if userID <= 0 {
+		return http.StatusUnauthorized, gin.H{"error": "unauthorized"}
+	}
+
 	idStr := ctx.PostForm("id")
 
 	id, err := strconv.Atoi(idStr)
@@ -29,8 +34,8 @@ func CreateById(db *sql.DB, ctx *gin.Context) (int, any) {
 
 	if !strings.HasSuffix(header.Filename, ".txt") {
 		return http.StatusBadRequest, gin.H{
-			"error": "only .txt files allowed",	}
-		
+			"error": "only .txt files allowed"}
+
 	}
 
 	data, err := io.ReadAll(file)
@@ -40,7 +45,7 @@ func CreateById(db *sql.DB, ctx *gin.Context) (int, any) {
 
 	letters, words, lines, spaces, special := Filecontext(id, string(data))
 
-	err = repo.InsertData(db, words, letters, spaces, lines, special)
+	err = repo.InsertData(db, userID, words, letters, spaces, lines, special)
 	if err != nil {
 		log.Print("error : Internal Server Error")
 		return http.StatusInternalServerError, gin.H{"error": err.Error()}

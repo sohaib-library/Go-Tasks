@@ -5,8 +5,8 @@ import (
 	"web-server/repo"
 )
 
-func DeleteByID(db *sql.DB, id int) (int64, error) {
+func DeleteByID(db *sql.DB, id, userID int) (int64, error) {
 
-	return repo.DeleteResultByID(db , id)
+	return repo.DeleteResultByID(db, id, userID)
 
 }

@@ -10,7 +10,13 @@ import (
 )
 
 func Getdata(ctx *gin.Context) {
-	results, err := service.GetAll(database.DB)
+	userID := ctx.GetInt("user_id")
+	if userID <= 0 {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	results, err := service.GetAll(database.DB, userID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

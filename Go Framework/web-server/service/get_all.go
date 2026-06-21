@@ -6,10 +6,8 @@ import (
 	"web-server/repo"
 )
 
-func GetAll(db *sql.DB) ([]models.File, error) {
+func GetAll(db *sql.DB, userID int) ([]models.File, error) {
 
-	return repo.GetAllResults(db)
-	
+	return repo.GetAllResults(db, userID)
 
-	
 }

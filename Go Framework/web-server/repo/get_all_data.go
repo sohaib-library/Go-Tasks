@@ -6,12 +6,14 @@ import (
 )
 
 // Get all data
-func GetAllResults(db *sql.DB) ([]models.File, error) {
+func GetAllResults(db *sql.DB, userID int) ([]models.File, error) {
 
 	rows, err := db.Query(`
-		SELECT id, total_words, total_letters, total_spaces, total_lines, total_special_char
+		SELECT id, user_id, total_words, total_letters, total_spaces, total_lines, total_special_char
 		FROM result
-	`)
+		WHERE user_id = $1
+		ORDER BY id
+	`, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -24,6 +26,7 @@ func GetAllResults(db *sql.DB) ([]models.File, error) {
 		var f models.File
 		if err := rows.Scan(
 			&f.ID,
+			&f.UserID,
 			&f.TotalWords,
 			&f.TotalLetters,
 			&f.TotalSpaces,

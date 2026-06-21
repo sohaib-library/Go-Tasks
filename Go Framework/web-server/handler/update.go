@@ -26,7 +26,13 @@ func Updateid(ctx *gin.Context) {
 		return
 	}
 
-	affected, err := service.UpdateByID(database.DB, Id, f)
+	userID := ctx.GetInt("user_id")
+	if userID <= 0 {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	affected, err := service.UpdateByID(database.DB, Id, userID, f)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update record"})

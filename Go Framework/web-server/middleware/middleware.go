@@ -10,25 +10,35 @@ import (
 )
 
 func AuthenticationMiddleware(ctx *gin.Context) {
-	// Extract the token from the Authorization header
 	authHeader := ctx.GetHeader("Authorization")
 	if authHeader == "" {
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid Email and Password"})
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "authorization header is missing"})
 		log.Print("Authorization header is missing")
 		return
 	}
 
-	// Split the header to get the token part
-	tokenString := strings.Split(authHeader, "Bearer ")[1]
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid authorization format"})
+		log.Print("Invalid authorization format")
+		return
+	}
 
-	_, err := utils.VerifyJWT(tokenString)
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
 
+	claims, err := utils.VerifyJWT(tokenString)
 	if err != nil {
-		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid Email and Password"})
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
 		log.Print("Invalid Token")
 		return
 	}
 
-	// Token is valid, proceed with the request
+	userIDFloat, ok := claims["user_id"].(float64)
+	if !ok || userIDFloat <= 0 {
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "invalid token claims"})
+		log.Print("Invalid user_id claim")
+		return
+	}
+
+	ctx.Set("user_id", int(userIDFloat))
 	ctx.Next()
 }

@@ -11,23 +11,22 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Login(login models.Login) ( error , string ){
+func Login(login models.Login) (error, string) {
 
 	user, err := repo.Login(login)
 	if err != nil {
-		return  err , ""
+		return err, ""
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PASSWORD), []byte(login.PASSWORD))
 	if err != nil {
-		return  err , ""
+		return err, ""
 	}
 
-	token ,err := utils.GenerateJWT(login.EMAIL)
+	token, err := utils.GenerateJWT(user.ID, login.EMAIL)
 	if err != nil {
-		return  err , ""
+		return err, ""
 	}
-	
 
-	return  nil , token
+	return nil, token
 }

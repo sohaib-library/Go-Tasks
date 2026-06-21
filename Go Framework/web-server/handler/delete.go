@@ -20,7 +20,13 @@ func Deleteid(ctx *gin.Context) {
 		return
 	}
 
-	affected, err := service.DeleteByID(database.DB, Id)
+	userID := ctx.GetInt("user_id")
+	if userID <= 0 {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+		return
+	}
+
+	affected, err := service.DeleteByID(database.DB, Id, userID)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
