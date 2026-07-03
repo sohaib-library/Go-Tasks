@@ -5,13 +5,11 @@ import (
 	"net/http"
 
 	"web-server/models"
-	"web-server/service"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
-func Login(ctx *gin.Context) {
+func (h *Handler) Login( ctx *gin.Context) {
 
 	var login models.Login
 
@@ -21,9 +19,9 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	err, token := service.Login(login)
+	token, err := h.Authuser.Login(login)
 	if err != nil {
-		logrus.Error(err)
+		log.Print(err)
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid email or password"})
 		return
 	}

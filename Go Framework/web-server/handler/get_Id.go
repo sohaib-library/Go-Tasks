@@ -3,14 +3,11 @@ package handler
 import (
 	"net/http"
 	"strconv"
-	"web-server/database"
-	// "web-server/repo"
-	"web-server/service"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Getid(ctx *gin.Context) {
+func (getbyid *Handler) Getid(ctx *gin.Context) {
 	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)
 	if err != nil || Id == 0 {
@@ -24,7 +21,7 @@ func Getid(ctx *gin.Context) {
 		return
 	}
 
-	f, err := service.GetByID(database.DB, Id, userID)
+	f, err := getbyid.Analyzer.GetByID(Id, userID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "Document not found"})
 		return

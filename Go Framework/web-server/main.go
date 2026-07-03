@@ -7,13 +7,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
 
+func main() {
 	DB := database.Database(".env")
 	defer DB.Close()
 	database.Migertions(DB)
-
+  
 	router := gin.Default()
-	route.RegisterRoute(router)
+	route.RegisterRoute(router, DB)
 	router.Run(":8000")
-}
+  }

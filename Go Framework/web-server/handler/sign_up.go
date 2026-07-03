@@ -6,14 +6,13 @@ import (
 	"regexp"
 	"web-server/database"
 	"web-server/models"
-	"web-server/service"
 	"web-server/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
-func SignUP(ctx *gin.Context) {
+func (h *Handler) SignUP(ctx *gin.Context) {
 
 	var users models.Users
 
@@ -38,7 +37,7 @@ func SignUP(ctx *gin.Context) {
 		return
 	}
 
-	affected, err := service.SignUP(database.DB, users)
+	affected, err := h.Authuser.SignUp(database.DB, users)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Email Already Exists"})

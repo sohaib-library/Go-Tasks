@@ -3,16 +3,14 @@ package handler
 import (
 	"net/http"
 	"strconv"
-	"web-server/database"
 	"web-server/models"
-	// "web-server/repo"
-	"web-server/service"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
-func Updateid(ctx *gin.Context) {
+func (update *Handler) Updateid(ctx *gin.Context) {
+
 	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)
 	if err != nil || Id == 0 {
@@ -32,7 +30,7 @@ func Updateid(ctx *gin.Context) {
 		return
 	}
 
-	affected, err := service.UpdateByID(database.DB, Id, userID, f)
+	affected, err := update.Analyzer.UpdateByID(Id, userID, f)
 	if err != nil {
 		logrus.Error(err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update record"})
