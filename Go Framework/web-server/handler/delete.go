@@ -23,15 +23,13 @@ func  (delete *Handler)Deleteid(ctx *gin.Context) {
 		return
 	}
 
-	affected, err := delete.Analyzer.DeleteByID(Id, userID)
+	_, err = delete.Analyzer.DeleteByID(Id, userID)
 	if err != nil {
-		logrus.Error(err)
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete user"})
-		return
-	}
-
-	if affected == 0 {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		if err.Error() == "user not found" {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

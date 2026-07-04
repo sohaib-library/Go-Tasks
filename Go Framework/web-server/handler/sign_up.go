@@ -4,12 +4,10 @@ import (
 	"log"
 	"net/http"
 	"regexp"
-	"web-server/database"
 	"web-server/models"
 	"web-server/utils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 func (h *Handler) SignUP(ctx *gin.Context) {
@@ -34,18 +32,6 @@ func (h *Handler) SignUP(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "Enter Valid Email",
 		})
-		return
-	}
-
-	affected, err := h.Authuser.SignUp(database.DB, users)
-	if err != nil {
-		logrus.Error(err)
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Email Already Exists"})
-		return
-	}
-
-	if affected == 0 {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "User was not inserted"})
 		return
 	}
 

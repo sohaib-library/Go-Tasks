@@ -2,12 +2,10 @@ package analyzer
 
 import (
 	"web-server/models"
-
-	"github.com/gin-gonic/gin"
 )
 
 type AnalyzedServices interface {
-	CreateById(ctx *gin.Context) (int, any)
+	CreateById(userID, id int, filename string, content []byte) (*models.WordCountResponse, error)
 	DeleteByID(id, userID int) (int64, error)
 	GetAll(userID int) ([]models.File, error)
 	GetByID(id, userID int) (models.File, error)
