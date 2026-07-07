@@ -5,10 +5,22 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
-func  (delete *Handler)Deleteid(ctx *gin.Context) {
+// Deleteid godoc
+// @Summary      Delete result by ID
+// @Description  Delete an analyzed file record by its ID for the authenticated user
+// @Tags         analyzer
+// @Produce      json
+// @Security     BearerAuth
+// @Param        Id  path      int  true  "Record ID"
+// @Success      200  {object}  map[string]string  "Deleted successfully"
+// @Failure      400  {object}  map[string]string  "Invalid ID"
+// @Failure      401  {object}  map[string]string  "Unauthorized"
+// @Failure      404  {object}  map[string]string  "Not found"
+// @Failure      500  {object}  map[string]string  "Internal server error"
+// @Router       /result/{Id} [delete]
+func (delete *Handler) Deleteid(ctx *gin.Context) {
 	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)
 

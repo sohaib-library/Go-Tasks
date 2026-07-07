@@ -8,6 +8,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Filecount godoc
+// @Summary      Analyze a file
+// @Description  Upload a file and get word, letter, space, line, and special character counts
+// @Tags         analyzer
+// @Accept       multipart/form-data
+// @Produce      json
+// @Security     BearerAuth
+// @Param        id    formData  int   true  "Document ID"
+// @Param        file  formData  file  true  "File to analyze"
+// @Success      200   {object}  models.File
+// @Failure      400   {object}  map[string]string  "Invalid input or file"
+// @Failure      401   {object}  map[string]string  "Unauthorized"
+// @Failure      500   {object}  map[string]string  "Internal server error"
+// @Router       /count [post]
 func (h *Handler) Filecount(ctx *gin.Context) {
 	userID := ctx.GetInt("user_id")
 	if userID <= 0 {

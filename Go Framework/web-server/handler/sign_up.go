@@ -10,6 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SignUP godoc
+// @Summary      User registration
+// @Description  Register a new user account
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        user  body      models.Users  true  "User registration details"
+// @Success      200   {object}  map[string]string  "Success message"
+// @Failure      400   {object}  map[string]string  "Invalid signup request or email"
+// @Router       /signup [post]
 func (h *Handler) SignUP(ctx *gin.Context) {
 
 	var users models.Users

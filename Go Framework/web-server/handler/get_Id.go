@@ -7,6 +7,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Getid godoc
+// @Summary      Get result by ID
+// @Description  Retrieve a single analyzed file record by its ID for the authenticated user
+// @Tags         analyzer
+// @Produce      json
+// @Security     BearerAuth
+// @Param        Id  path      int  true  "Record ID"
+// @Success      200  {object}  models.File
+// @Failure      400  {object}  map[string]string  "Invalid ID"
+// @Failure      401  {object}  map[string]string  "Unauthorized"
+// @Failure      404  {object}  map[string]string  "Document not found"
+// @Router       /result/{Id} [get]
 func (getbyid *Handler) Getid(ctx *gin.Context) {
 	key := ctx.Param("Id")
 	Id, err := strconv.Atoi(key)

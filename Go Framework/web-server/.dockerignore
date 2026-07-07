@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# Compiled binary (built inside Docker, not needed from host)
+web-server
+
+# Environment file (mounted at runtime, not baked into image)
+.env
+.env.docker
+
+# Docker files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Docs / misc
+docs
+*.md
+"routes file"
+
+# Go test cache
+**/*_test.go
